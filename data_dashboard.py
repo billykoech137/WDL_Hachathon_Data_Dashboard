@@ -91,6 +91,7 @@ content = html.Div(children=[
 
 # Initializing the app
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+server = app.server
 
 # Creating the app layout
 app.layout = html.Div(children=[sidebar, content])
