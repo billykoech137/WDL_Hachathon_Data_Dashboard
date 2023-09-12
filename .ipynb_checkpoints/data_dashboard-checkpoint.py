@@ -6,7 +6,7 @@ from dash import html
 from dash.dependencies import Input, Output, State
 import dash_bootstrap_components as dbc
 
-df_data = pd.read_csv('modified.csv')
+data = pd.read_csv('modified.csv')
 
 total = ['All Years']
 years = [i for i in range(2005,2020,1)]
@@ -91,6 +91,7 @@ content = html.Div(children=[
 
 # Initializing the app
 app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP])
+server = app.server
 
 # Creating the app layout
 app.layout = html.Div(children=[sidebar, content])
@@ -109,30 +110,30 @@ app.layout = html.Div(children=[sidebar, content])
 def get_graph(country, region, year, children):
     
     if country == 'AC' or year == 'All Years':
-                            
+        
         if country == 'AC' and year == 'All Years':
-            df = df_data[(df_data['region']==region)]
-            avg_val = df.groupby(['activity','sex'])['population'].sum().reset_index()
-            fig = px.bar(avg_val, x='activity', y='population', color='sex', barmode='group')
+            df = data[(data['region']==region)]
+            avg_val = df.groupby(['activity','sex'])['obs_value'].sum().reset_index()
+            fig = px.bar(avg_val, x='activity', y='obs_value', color='sex', barmode='group')
             return dcc.Graph(figure=fig)
         
         elif country == 'AC':
-            df = df_data[(df_data['region']==region) & (df_data['year']==year)]
-            avg_val = df.groupby(['activity','sex'])['population'].sum().reset_index()
-            fig = px.bar(avg_val, x='activity', y='population', color='sex', barmode='group')
+            df = data[(data['region']==region) & (data['year']==year)]
+            avg_val = df.groupby(['activity','sex'])['obs_value'].sum().reset_index()
+            fig = px.bar(avg_val, x='activity', y='obs_value', color='sex', barmode='group')
             return dcc.Graph(figure=fig)
         
         
         elif year == 'All Years':
-            df = df_data[(df_data['country']== country) & (df_data['region']==region)]
-            avg_val = df.groupby(['activity','sex'])['population'].sum().reset_index()
-            fig = px.bar(avg_val, x='activity', y='population', color='sex', barmode='group')
+            df = data[(data['country']== country) & (data['region']==region)]
+            avg_val = df.groupby(['activity','sex'])['obs_value'].sum().reset_index()
+            fig = px.bar(avg_val, x='activity', y='obs_value', color='sex', barmode='group')
             return dcc.Graph(figure=fig)
               
     else:
-        df = df_data[(df_data['country']== country) & (df_data['region']==region) & (df_data['year']==year)]
-        avg_val = df.groupby(['activity','sex'])['population'].sum().reset_index()
-        fig = px.bar(avg_val, x='activity', y='population', color='sex', barmode='group')
+        df = data[(data['country']== country) & (data['region']==region) & (data['year']==year)]
+        avg_val = df.groupby(['activity','sex'])['obs_value'].sum().reset_index()
+        fig = px.bar(avg_val, x='activity', y='obs_value', color='sex', barmode='group')
         return dcc.Graph(figure=fig)
 
 
